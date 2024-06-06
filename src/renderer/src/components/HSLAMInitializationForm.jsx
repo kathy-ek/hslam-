@@ -31,8 +31,11 @@ const HSLAMForm = () => {
       viewerGUI: true,
       sequenceReversed: false
     },
-    onSubmit: (values) => {
-      window.electron.ipcRenderer.invoke('hslam-initialization', values)
+    onSubmit: async (values) => {
+      const result = await window.electron.ipcRenderer.invoke('hslam-initialization', values)
+      if (result) {
+        alert(result)
+      }
     }
   })
 

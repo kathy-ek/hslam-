@@ -85,8 +85,8 @@ app.whenReady().then(() => {
 
   ipcMain.handle('hslam-initialization', async (event, values) => {
     return new Promise((resolve, reject) => {
-      // const executableFile = '`${values.workspaceFolder}/build/${values.buildType}/bin/HSLAM `'
-      const executableFile = '~/Desktop/mock_hslam '
+      const executableFile = '~/Desktop/VRL/mock_hslam/mock_hslam '
+
       const command =
         executableFile +
         `${values.dataType === 'dataset' ? `--files="${values.datasetPath}" ` : ''}` +
@@ -94,9 +94,9 @@ app.whenReady().then(() => {
         `${values.photometric ? `--gamma="${values.gammaFile}" ` : ''}` +
         `${values.photometric ? `--vignette="${values.vignetteFile}" ` : ''}` +
         `${values.loopClosure ? '--LoopClosure=True ' : '--LoopClosure=False '}` +
-        `${values.fileLogging ? '--noLog=True ' : '--noLog=False '}` +
+        `${!values.fileLogging ? '--noLog=True ' : '--noLog=False '}` +
         `${values.sequenceReversed ? '--reverse=True ' : '--reverse=False '} ` +
-        `${values.viewerGUI ? '--nogui=True ' : '--nogui=False '}`
+        `${!values.viewerGUI ? '--nogui=True ' : '--nogui=False '}`
 
       exec(command, (error, stdout, stderr) => {
         if (error) {
