@@ -12,7 +12,6 @@ const HSLAMForm = () => {
 
   const validationSchema = object({
     workspaceDir: string().required('Workspace directory is required'),
-    buildType: string().required('Build type is required'),
     dataType: string().required('Data type is required'),
     calibFile: string().when('dataType', {
       is: 'camera',
@@ -61,10 +60,9 @@ const HSLAMForm = () => {
     validateOnMount: true,
     onSubmit: async (values) => {
       try {
+        const openRVIZ = await window.electron.ipcRenderer.send('open-rviz')
         const result = await window.electron.ipcRenderer.invoke('hslam-initialization', values)
         if (result) {
-          alert(result)
-          const openRVIZ = await window.electron.ipcRenderer.invoke('open-rviz', values)
           const quitApplication = await window.electron.ipcRenderer.invoke(
             'quit-application',
             values
@@ -102,23 +100,7 @@ const HSLAMForm = () => {
             onBlur={formik.handleBlur('workspaceDir')}
           />
         </Grid.Col>
-        <Grid.Col span={6}>
-          <Select
-            label="Build Type"
-            placeholder="Select Build Type"
-            error={formik.touched.buildType && formik.errors.buildType}
-            data={[
-              { value: 'ROS Build', label: '' },
-              { value: 'Debug/', label: 'Debug' },
-              { value: 'Release/', label: 'Release' },
-              { value: 'RelWithDebInfo/', label: 'RelWithDebInfo' },
-              { value: 'MinSizeRel/', label: 'MinSizeRel' }
-            ]}
-            onChange={(value) => formik.setFieldValue('buildType', value)}
-            value={formik.values.buildType}
-            onBlur={formik.handleBlur('buildType')}
-          />
-        </Grid.Col>
+        <Grid.Col span={6} />
         <Grid.Col span={6}>
           <Select
             label="Data Type"
