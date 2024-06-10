@@ -64,7 +64,7 @@ app.disableHardwareAcceleration()
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.hslam_initializer')
+  electronApp.setAppUserModelId('com.electron')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -75,7 +75,7 @@ app.whenReady().then(() => {
 
   ipcMain.handle('hslam-initialization', async (event, values) => {
     return new Promise((resolve, reject) => {
-      const executableFile = `./build/${values.buildType}/bin/HSLAM `;
+      const executableFile = `${values.workspaceDir}/build/${values.buildType}bin/HSLAM `
 
       const command =
         executableFile +

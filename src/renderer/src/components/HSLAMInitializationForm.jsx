@@ -11,6 +11,7 @@ const HSLAMForm = () => {
   const datasetFileRef = useRef(null)
 
   const validationSchema = object({
+    workspaceDir: string().required('Workspace directory is required'),
     buildType: string().required('Build type is required'),
     dataType: string().required('Data type is required'),
     calibFile: string().when('dataType', {
@@ -42,6 +43,7 @@ const HSLAMForm = () => {
 
   const formik = useFormik({
     initialValues: {
+      workspaceDir: null,
       buildType: null,
       dataType: null,
       calibFile: null,
@@ -76,28 +78,47 @@ const HSLAMForm = () => {
     }
   })
 
+  const handleFolderSelection = async (fieldName) => {
+    const result = await window.electron.ipcRenderer.invoke('open-folder-dialog')
+    if (result) {
+      formik.setFieldValue(fieldName, result)
+    }
+  }
+
   return (
     <Container size="sm" style={{ marginTop: '40px' }}>
       <Title order={1}>Launch HSLAM</Title>
 
       <Grid className="form-grid-wrapper">
         <Grid.Col span={6}>
+          <TextInput
+            label="Workspace Directory"
+            placeholder="Select Workspace Directory"
+            onClick={() => {
+              handleFolderSelection('workspaceDir')
+            }}
+            value={formik.values.workspaceDir}
+            error={formik.touched.workspaceDir && formik.errors.workspaceDir}
+            onBlur={formik.handleBlur('workspaceDir')}
+          />
+        </Grid.Col>
+        <Grid.Col span={6}>
           <Select
             label="Build Type"
             placeholder="Select Build Type"
             error={formik.touched.buildType && formik.errors.buildType}
             data={[
-              { value: 'Debug', label: 'Debug' },
-              { value: 'Release', label: 'Release' },
-              { value: 'RelWithDebInfo', label: 'RelWithDebInfo' },
-              { value: 'MinSizeRel', label: 'MinSizeRel' }
+              { value: 'ROS Build', label: '' },
+              { value: 'Debug/', label: 'Debug' },
+              { value: 'Release/', label: 'Release' },
+              { value: 'RelWithDebInfo/', label: 'RelWithDebInfo' },
+              { value: 'MinSizeRel/', label: 'MinSizeRel' }
             ]}
             onChange={(value) => formik.setFieldValue('buildType', value)}
             value={formik.values.buildType}
             onBlur={formik.handleBlur('buildType')}
           />
         </Grid.Col>
-        <Grid.Col span={6} />
         <Grid.Col span={6}>
           <Select
             label="Data Type"
