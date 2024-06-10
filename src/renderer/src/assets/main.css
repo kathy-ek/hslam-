@@ -6,5 +6,9 @@
 
 .form-grid-wrapper > * {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
+}
+
+.form-checkbox {
+  align-self: flex-end
 }

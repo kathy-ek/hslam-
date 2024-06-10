@@ -72,17 +72,6 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
-  // ipcMain.on('ping', () =>
-  //   exec('ls ~/Desktop', (error, stdout, stderr) => {
-  //     if (error) {
-  //       console.error(`exec error: ${error}`)
-  //       return
-  //     }
-  //     console.log(`stdout: ${stdout}`)
-  //   })
-  // )
-
   ipcMain.handle('hslam-initialization', async (event, values) => {
     return new Promise((resolve, reject) => {
       const executableFile = '~/Desktop/VRL/mock_hslam/mock_hslam '
@@ -107,6 +96,29 @@ app.whenReady().then(() => {
           resolve(stdout)
         }
       })
+    })
+  })
+
+  ipcMain.handle('open-rviz', async (event, values) => {
+    return new Promise((resolve, reject) => {
+      const command = 'rviz2'
+
+      exec(command, (error, stdout, stderr) => {
+        if (error) {
+          console.error('Error opening RVIZ:', stderr)
+          reject(stderr)
+        } else {
+          console.log('Output from RVIZ2:', stdout)
+          resolve(stdout)
+        }
+      })
+    })
+  })
+
+  ipcMain.handle('quit-application', async (event, values) => {
+    return new Promise((resolve, reject) => {
+      app.quit()
+      resolve('Application has been closed')
     })
   })
 
