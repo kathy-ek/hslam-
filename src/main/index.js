@@ -102,24 +102,35 @@ app.whenReady().then(() => {
   })
 
   ipcMain.on('open-rviz', (event, values) => {
-    exec('open ~/Desktop')
+    return new Promise((resolve, reject) => {
+      const command = '/opt/ros/foxy/bin/rviz2';
+      const env = Object.assign({}, process.env);
+      env.LD_LIBRARY_PATH = [
+        '/opt/ros/foxy/lib',
+        '/opt/ros/foxy/opt/yaml_cpp_vendor/lib',
+        '/opt/ros/foxy/opt/rviz_ogre_vendor/lib',
+        '/opt/ros/foxy/lib/x86_64-linux-gnu',
+        '/opt/ros/foxy/lib',
+        '/home/user/catkin_ws/src/FSLAM/Thirdparty/CompiledLibs/lib',
+        env.LD_LIBRARY_PATH || ''
+      ].join(':');
+  
+      // Set AMENT_PREFIX_PATH to /opt/ros/foxy
+      env.AMENT_PREFIX_PATH = '/opt/ros/foxy';
+  
+      exec(command, { env }, (error, stdout, stderr) => {
+        if (error) {
+          console.error('Error opening RVIZ:', stderr);
+          reject(stderr);
+        } else {
+          console.log('Output from RVIZ2:', stdout);
+          resolve(stdout);
+        }
+      });
+    });
   })
 
-  // ipcMain.handle('open-rviz', async (event, values) => {
-  //   return new Promise((resolve, reject) => {
-  //     const command = 'rviz2'
-
-  //     exec(command, (error, stdout, stderr) => {
-  //       if (error) {
-  //         console.error('Error opening RVIZ:', stderr)
-  //         reject(stderr)
-  //       } else {
-  //         console.log('Output from RVIZ2:', stdout)
-  //         resolve(stdout)
-  //       }
-  //     })
-  //   })
-  // })
+ 
 
   ipcMain.handle('quit-application', async (event, values) => {
     return new Promise((resolve, reject) => {

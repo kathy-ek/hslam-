@@ -60,7 +60,7 @@ const HSLAMForm = () => {
     validateOnMount: true,
     onSubmit: async (values) => {
       try {
-        const openRVIZ = await window.electron.ipcRenderer.send('open-rviz')
+        window.electron.ipcRenderer.send('open-rviz')
         const result = await window.electron.ipcRenderer.invoke('hslam-initialization', values)
         if (result) {
           const quitApplication = await window.electron.ipcRenderer.invoke(
