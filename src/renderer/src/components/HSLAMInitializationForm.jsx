@@ -11,6 +11,7 @@ const HSLAMForm = () => {
   const datasetFileRef = useRef(null)
 
   const validationSchema = object({
+    buildType: string().required('Build type is required'),
     dataType: string().required('Data type is required'),
     calibFile: string().when('dataType', {
       is: 'camera',
@@ -41,6 +42,7 @@ const HSLAMForm = () => {
 
   const formik = useFormik({
     initialValues: {
+      buildType: null,
       dataType: null,
       calibFile: null,
       datasetPath: null,
@@ -79,6 +81,23 @@ const HSLAMForm = () => {
       <Title order={1}>Launch HSLAM</Title>
 
       <Grid className="form-grid-wrapper">
+        <Grid.Col span={6}>
+          <Select
+            label="Build Type"
+            placeholder="Select Build Type"
+            error={formik.touched.buildType && formik.errors.buildType}
+            data={[
+              { value: 'Debug', label: 'Debug' },
+              { value: 'Release', label: 'Release' },
+              { value: 'RelWithDebInfo', label: 'RelWithDebInfo' },
+              { value: 'MinSizeRel', label: 'MinSizeRel' }
+            ]}
+            onChange={(value) => formik.setFieldValue('buildType', value)}
+            value={formik.values.buildType}
+            onBlur={formik.handleBlur('buildType')}
+          />
+        </Grid.Col>
+        <Grid.Col span={6} />
         <Grid.Col span={6}>
           <Select
             label="Data Type"

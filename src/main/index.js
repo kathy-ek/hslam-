@@ -16,8 +16,7 @@ function createWindow() {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     },
-    title: 'HSLAM Initialization',
-    
+    title: 'HSLAM Initialization'
   })
 
   mainWindow.on('ready-to-show', () => {
@@ -65,7 +64,7 @@ app.disableHardwareAcceleration()
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('com.hslam_initializer')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
@@ -76,7 +75,7 @@ app.whenReady().then(() => {
 
   ipcMain.handle('hslam-initialization', async (event, values) => {
     return new Promise((resolve, reject) => {
-      const executableFile = '~/Desktop/VRL/mock_hslam/mock_hslam '
+      const executableFile = `./build/${values.buildType}/bin/HSLAM `;
 
       const command =
         executableFile +
