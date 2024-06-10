@@ -19,13 +19,8 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.0",
     "@electron-toolkit/utils": "^3.0.0",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@fontsource/roboto": "^5.0.13",
     "@mantine/core": "^7.10.1",
     "@mantine/hooks": "^7.10.1",
-    "@mui/icons-material": "^5.15.19",
-    "@mui/material": "^5.15.19",
     "formik": "^2.4.6",
     "yup": "^1.4.0"
   },
