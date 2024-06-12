@@ -1,6 +1,6 @@
-# hslam_ui
+# HSLAM UI
 
-An Electron application with React
+HSLAM Initialization User Interface
 
 ## Recommended IDE Setup
 
