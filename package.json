@@ -21,6 +21,7 @@
     "@electron-toolkit/utils": "^3.0.0",
     "@mantine/core": "^7.10.1",
     "@mantine/hooks": "^7.10.1",
+    "@rollup/rollup-linux-x64-gnu": "^4.18.0",
     "formik": "^2.4.6",
     "yup": "^1.4.0"
   },
