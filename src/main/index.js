@@ -106,7 +106,7 @@ app.whenReady().then(() => {
 
   ipcMain.on('open-rviz', (event, values) => {
     return new Promise((resolve, reject) => {
-      const command = '/opt/ros/noetic/bin/rviz2'
+      const command = '/opt/ros/noetic/bin/rviz'
       const env = Object.assign({}, process.env)
       env.LD_LIBRARY_PATH = [
         '/opt/ros/noetic/lib',
