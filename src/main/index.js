@@ -76,9 +76,10 @@ app.whenReady().then(() => {
   ipcMain.handle('hslam-initialization', async (event, values) => {
     return new Promise((resolve, reject) => {
       const executableFile = `${values.workspaceDir}/build/bin/HSLAM `
-      // const executableFile = `~/Desktop/VRL/mock_hslam/mock_hslam `
 
-      const command =
+      const rosCommand = `rosrun fslam_ros fslam_live image:=${values.cameraPath} calib=${values.calibFile} gamma=${values.gammaFile} vignette=${values.vignetteFile}`
+
+      const cppCommand =
         executableFile +
         `${values.dataType === 'dataset' ? `--files="${values.datasetPath}" ` : ''}` +
         `--calib="${values.calibFile}" ` +
@@ -88,6 +89,8 @@ app.whenReady().then(() => {
         `${!values.fileLogging ? '--noLog=True ' : '--noLog=False '}` +
         `${values.sequenceReversed ? '--reverse=True ' : '--reverse=False '} ` +
         `${!values.viewerGUI ? '--nogui=True ' : '--nogui=False '}`
+
+      let command = values.dataType === 'dataset' ? cppCommand : rosCommand
 
       exec(command, (error, stdout, stderr) => {
         if (error) {
@@ -103,8 +106,8 @@ app.whenReady().then(() => {
 
   ipcMain.on('open-rviz', (event, values) => {
     return new Promise((resolve, reject) => {
-      const command = '/opt/ros/foxy/bin/rviz2';
-      const env = Object.assign({}, process.env);
+      const command = '/opt/ros/foxy/bin/rviz2'
+      const env = Object.assign({}, process.env)
       env.LD_LIBRARY_PATH = [
         '/opt/ros/foxy/lib',
         '/opt/ros/foxy/opt/yaml_cpp_vendor/lib',
@@ -113,24 +116,22 @@ app.whenReady().then(() => {
         '/opt/ros/foxy/lib',
         '/home/user/catkin_ws/src/FSLAM/Thirdparty/CompiledLibs/lib',
         env.LD_LIBRARY_PATH || ''
-      ].join(':');
-  
+      ].join(':')
+
       // Set AMENT_PREFIX_PATH to /opt/ros/foxy
-      env.AMENT_PREFIX_PATH = '/opt/ros/foxy';
-  
+      env.AMENT_PREFIX_PATH = '/opt/ros/foxy'
+
       exec(command, { env }, (error, stdout, stderr) => {
         if (error) {
-          console.error('Error opening RVIZ:', stderr);
-          reject(stderr);
+          console.error('Error opening RVIZ:', stderr)
+          reject(stderr)
         } else {
-          console.log('Output from RVIZ2:', stdout);
-          resolve(stdout);
+          console.log('Output from RVIZ2:', stdout)
+          resolve(stdout)
         }
-      });
-    });
+      })
+    })
   })
-
- 
 
   ipcMain.handle('quit-application', async (event, values) => {
     return new Promise((resolve, reject) => {
