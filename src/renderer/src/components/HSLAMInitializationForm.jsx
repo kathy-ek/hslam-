@@ -150,6 +150,7 @@ const HSLAMForm = () => {
               value={formik.values.cameraPath}
               error={formik.touched.cameraPath && formik.errors.cameraPath}
               onBlur={formik.handleBlur('cameraPath')}
+              onChange={formik.handleChange('cameraPath')}
             />
           </Grid.Col>
         )}
