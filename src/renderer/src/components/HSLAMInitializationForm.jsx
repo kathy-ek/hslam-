@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import { useFormik } from 'formik'
-import { TextInput, Checkbox, Button, Select, Container, Title, Grid } from '@mantine/core'
+import { TextInput, Checkbox, Button, Select, Container, Title, Grid, GridCol } from '@mantine/core'
 
 import { object, string, boolean } from 'yup'
 
@@ -16,6 +16,10 @@ const HSLAMForm = () => {
     calibFile: string().when('dataType', {
       is: 'camera',
       then: (schema) => schema.required('A camera calibration file is required')
+    }),
+    cameraPath: string().when('dataType', {
+      is: 'camera',
+      then: (schema) => schema.required('A camera path is required')
     }),
     datasetPath: string().when('dataType', {
       is: 'dataset',
@@ -46,6 +50,7 @@ const HSLAMForm = () => {
       buildType: null,
       dataType: null,
       calibFile: null,
+      cameraPath: null,
       datasetPath: null,
       gammaFile: null,
       vignetteFile: null,
@@ -100,7 +105,6 @@ const HSLAMForm = () => {
             onBlur={formik.handleBlur('workspaceDir')}
           />
         </Grid.Col>
-        <Grid.Col span={6} />
         <Grid.Col span={6}>
           <Select
             label="Data Type"
@@ -115,6 +119,7 @@ const HSLAMForm = () => {
             onBlur={formik.handleBlur('dataType')}
           />
         </Grid.Col>
+
         <Grid.Col span={6}>
           <TextInput
             label="Path of Camera Calibration File"
@@ -135,6 +140,19 @@ const HSLAMForm = () => {
             style={{ display: 'none' }}
           />
         </Grid.Col>
+        {formik.values.dataType === 'camera' ? (
+          <Grid.Col span={6}>
+            <TextInput
+              label="Camera Path"
+              placeholder="Camera Path"
+              value={formik.values.cameraPath}
+              error={formik.touched.cameraPath && formik.errors.cameraPath}
+              onBlur={formik.handleBlur('cameraPath')}
+            />
+          </Grid.Col>
+        ) : (
+          <Grid.Col span={6} />
+        )}
         {formik.values.dataType === 'dataset' && (
           <>
             <Grid.Col span={6}>
