@@ -77,7 +77,7 @@ app.whenReady().then(() => {
     return new Promise((resolve, reject) => {
       const executableFile = `${values.workspaceDir}/build/bin/HSLAM `
 
-      const rosCommand = `rosrun fslam_ros fslam_live image:=${values.cameraPath} calib=${values.calibFile} gamma=${values.gammaFile} vignette=${values.vignetteFile}`
+      const rosCommand = `roslaunch usb_cam usb_cam-test.launch && rosrun fslam_ros fslam_live image:=${values.cameraPath} calib=${values.calibFile} gamma=${values.gammaFile} vignette=${values.vignetteFile}`
 
       const cppCommand =
         executableFile +
