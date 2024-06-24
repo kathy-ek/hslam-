@@ -140,7 +140,9 @@ const HSLAMForm = () => {
             style={{ display: 'none' }}
           />
         </Grid.Col>
-        {formik.values.dataType === 'camera' ? (
+        {formik.values.dataType === 'dataset' ? (
+          <Grid.Col span={6} />
+        ) : (
           <Grid.Col span={6}>
             <TextInput
               label="Camera Path"
@@ -150,8 +152,6 @@ const HSLAMForm = () => {
               onBlur={formik.handleBlur('cameraPath')}
             />
           </Grid.Col>
-        ) : (
-          <Grid.Col span={6} />
         )}
         {formik.values.dataType === 'dataset' && (
           <>
