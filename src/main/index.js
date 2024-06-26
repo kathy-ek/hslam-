@@ -77,7 +77,8 @@ app.whenReady().then(() => {
     return new Promise((resolve, reject) => {
       const executableFile = `${values.workspaceDir}/build/bin/HSLAM `
 
-      const rosCommand = `roslaunch usb_cam usb_cam-test.launch && rosrun fslam_ros fslam_live image:=${values.cameraPath} calib=${values.calibFile} gamma=${values.gammaFile} vignette=${values.vignetteFile}`
+      const rosLaunch = `roslaunch usb_cam usb_cam-test.launch`
+      const rosCommand = `rosrun fslam_ros fslam_live image:=${values.cameraPath} calib=${values.calibFile} gamma=${values.gammaFile} vignette=${values.vignetteFile}`
 
       const cppCommand =
         executableFile +
@@ -91,6 +92,10 @@ app.whenReady().then(() => {
         `${!values.viewerGUI ? '--nogui=True ' : '--nogui=False '}`
 
       let command = values.dataType === 'dataset' ? cppCommand : rosCommand
+
+      if(values.dataType !== 'dataset') {
+        exec(rosLaunch)
+      }
 
       exec(command, (error, stdout, stderr) => {
         if (error) {
