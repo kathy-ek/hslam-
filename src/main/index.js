@@ -92,6 +92,11 @@ app.whenReady().then(() => {
 
       let command = values.dataType === 'dataset' ? cppCommand : rosCommand
 
+      if(values.dataType === 'camera') {
+        const rosLaunch = `roslaunch usb_cam usb_cam-test.launch`
+        exec(rosLaunch)
+      }
+
       exec(command, (error, stdout, stderr) => {
         if (error) {
           console.error('Error executing HSLAM:', stderr)
