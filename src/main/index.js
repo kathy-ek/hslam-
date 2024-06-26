@@ -77,7 +77,6 @@ app.whenReady().then(() => {
     return new Promise((resolve, reject) => {
       const executableFile = `${values.workspaceDir}/build/bin/HSLAM `
 
-      const rosLaunch = `roslaunch usb_cam usb_cam-test.launch`
       const rosCommand = `rosrun fslam_ros fslam_live image:=${values.cameraPath} calib=${values.calibFile} gamma=${values.gammaFile} vignette=${values.vignetteFile}`
 
       const cppCommand =
@@ -92,10 +91,6 @@ app.whenReady().then(() => {
         `${!values.viewerGUI ? '--nogui=True ' : '--nogui=False '}`
 
       let command = values.dataType === 'dataset' ? cppCommand : rosCommand
-
-      if(values.dataType !== 'dataset') {
-        exec(rosLaunch)
-      }
 
       exec(command, (error, stdout, stderr) => {
         if (error) {
@@ -137,6 +132,24 @@ app.whenReady().then(() => {
       })
     })
   })
+
+
+  ipcMain.on('run-roslaunch', (event, values) => {
+    return new Promise((resolve, reject) => {
+      const rosLaunch = `roslaunch usb_cam usb_cam-test.launch`
+
+      exec(rosLaunch, { env }, (error, stdout, stderr) => {
+        if (error) {
+          console.error('Error opening RosLaunch:', stderr)
+          reject(stderr)
+        } else {
+          console.log('Output from RosLaunch:', stdout)
+          resolve(stdout)
+        }
+      })
+    })
+  })
+
 
   ipcMain.handle('quit-application', async (event, values) => {
     return new Promise((resolve, reject) => {
