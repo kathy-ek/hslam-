@@ -138,7 +138,7 @@ app.whenReady().then(() => {
     return new Promise((resolve, reject) => {
       const rosLaunch = `roslaunch usb_cam usb_cam-test.launch`
 
-      exec(rosLaunch, { env }, (error, stdout, stderr) => {
+      exec(rosLaunch, (error, stdout, stderr) => {
         if (error) {
           console.error('Error opening RosLaunch:', stderr)
           reject(stderr)
