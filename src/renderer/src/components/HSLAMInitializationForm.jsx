@@ -259,11 +259,6 @@ const HSLAMForm = () => {
           />
         </Grid.Col>
       </Grid>
-      <Button color="blue" onClick={()=>{
-        window.electron.ipcRenderer.send('run-roslaunch')
-      }} disabled={formik.values.dataType !== 'camera'} style={{marginRight:8}}>
-        Launch ROS
-      </Button>
       <Button color="blue" onClick={formik.handleSubmit} disabled={!formik.isValid}>
         Submit
       </Button>

@@ -139,23 +139,6 @@ app.whenReady().then(() => {
   })
 
 
-  ipcMain.on('run-roslaunch', (event, values) => {
-    return new Promise((resolve, reject) => {
-      const rosLaunch = `roslaunch usb_cam usb_cam-test.launch`
-
-      exec(rosLaunch, (error, stdout, stderr) => {
-        if (error) {
-          console.error('Error opening RosLaunch:', stderr)
-          reject(stderr)
-        } else {
-          console.log('Output from RosLaunch:', stdout)
-          resolve(stdout)
-        }
-      })
-    })
-  })
-
-
   ipcMain.handle('quit-application', async (event, values) => {
     return new Promise((resolve, reject) => {
       app.quit()
